@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  
+  <body class="not-authenticated">
+    <nav class="navbar bg-black px-1">
+      <div class="container-fluid py-1">
+        <span class="navbar-brand mb-0 fs-4 text-white fw-medium"
+          >Full-Stack App</span
+        >
+
+        <div class="d-flex align-items-center">
+          <div class="flex-column gap-2 role-logged-out">
+            <a href="#/login" class="nav-link text-white-50 fs-5 fw-medium"
+              >login</a
+            >
+            <a href="#/register" class="nav-link text-white-50 fs-5 fw-medium"
+              >register</a
+            >
+          </div>
+
+          <div class="dropdown role-logged-in">
+            <button
+              class="btn btn-dark dropdown-toggle border-0 fs-5 fw-medium"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span id="nav-username">Admin</span>
+            </button>
+            <ul
+              class="dropdown-menu dropdown-menu-end shadow mt-2"
+              style="min-width: 180px; border-radius: 8px"
+            >
+              <li>
+                <a class="dropdown-item py-2" href="#/profile">Profile</a>
+              </li>
+
+              <li class="role-admin">
+                <a class="dropdown-item py-2" href="#/employees">Employees</a>
+              </li>
+              <li class="role-admin">
+                <a class="dropdown-item py-2" href="#/accounts">Accounts</a>
+              </li>
+              <li class="role-admin">
+                <a class="dropdown-item py-2" href="#/departments"
+                  >Departments</a
+                >
+              </li>
+
+              <li>
+                <a class="dropdown-item py-2" href="#/requests">My Requests</a>
+              </li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <button
+                  id="logout-btn"
+                  class="dropdown-item py-2 text-danger"
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <section id="home" class="page px-3 mt-5 active">
+      <div class="row">
+        <div class="col-md-9 col-lg-8">
+          <h1 class="fw-bold mb-3" style="font-size: 2.5rem; color: #212529">
+            Welcome to Full-Stack App
+          </h1>
+
+          <p class="fs-5 mb-4" style="color: #333">
+            A static prototype before backend integration. Simulates:
+          </p>
+
+          <ul
+            class="fs-5 mb-4"
+            style="list-style-type: disc; padding-left: 1.5rem"
+          >
+            <li class="mb-2">Email registration + fake verification</li>
+            <li class="mb-2">Login with JWT-like token simulation</li>
+            <li class="mb-2">Role-based UI (Admin/User)</li>
+            <li class="mb-2">CRUD for Employees, Departments, Requests</li>
+          </ul>
+
+          <div
+            class="alert border-0 d-flex align-items-center mb-4"
+            style="background-color: #e0f7ff; border-radius: 8px; padding: 1rem"
+          >
+            <span class="me-2">⚠️</span>
+            <div class="fs-5">
+              <strong>Note:</strong> All data is stored in
+              <code style="color: #d63384; background: none; font-weight: bold"
+                >localStorage</code
+              >. Refresh to reset.
+            </div>
+          </div>
+
+          <a
+            href="#register"
+            class="btn btn-primary d-inline-flex align-items-center px-4 py-2 fw-semibold"
+            style="
+              background-color: #515dfa;
+              border: none;
+              border-radius: 8px;
+              font-size: 1.2rem;
+            "
+          >
+            Get Started
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="currentColor"
+              class="bi bi-arrow-right ms-2"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="register" class="page px-3 mt-5">
+      <div class="row justify-content-start">
+        <div class="col-md-8 col-lg-6">
+          <h2 class="fw-bold mb-4">Register Account</h2>
+          <form id="registrationForm">
+            <div class="mb-3">
+              <label class="form-label text-secondary small fw-bold"
+                >First Name</label
+              >
+              <input
+                type="text"
+                id="reg-first-name"
+                class="form-control py-2"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-secondary small fw-bold"
+                >Last Name</label
+              >
+              <input
+                type="text"
+                id="reg-last-name"
+                class="form-control py-2"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label text-secondary small fw-bold"
+                >Email</label
+              >
+              <input
+                type="email"
+                id="reg-email"
+                class="form-control py-2"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label class="form-label text-secondary small fw-bold"
+                >Password</label
+              >
+              <input
+                type="password"
+                id="reg-password"
+                class="form-control py-2"
+                required
+              />
+            </div>
+            <div class="d-flex gap-2">
+              <button
+                type="submit"
+                class="btn btn-success px-4 py-2 fw-bold"
+                style="background-color: #2d7a4d; border: none"
+              >
+                Sign Up
+              </button>
+              <a href="#home" class="btn btn-outline-secondary px-4 py-2"
+                >Cancel</a
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="verify-email" class="page px-3 mt-5">
+      <h2 class="fw-bold">Verify Your Email</h2>
+      <div class="alert alert-success d-flex align-items-center mb-4">
+        <span class="me-2">✅</span> A verification link has been sent to .
+      </div>
+      <p>For demo purposes, click below to simulate verification:</p>
+      <div class="d-flex gap-2">
+        <button
+          id="verify-email-btn"
+          class="btn btn-success px-3"
+        >
+          ✅ Simulate Email Verification
+        </button>
+        <a href="#/login" class="btn btn-outline-secondary px-4">Go to Login</a>
+      </div>
+    </section>
+
+    <section id="login" class="page px-3 py-4">
+      <div
+        id="login-verified-alert"
+        class="alert alert-success d-flex align-items-center mb-4"
+        style="background-color: #d1e7dd; border-color: #badbcc"
+      >
+        <span class="me-2">✅</span> Email verified! You may now log in.
+      </div>
+
+      <h2 class="fw-bold mb-3">Login</h2>
+
+      <div class="col-md-6">
+        <form id="login-form">
+          <div class="mb-3">
+            <label
+              for="log-email"
+              class="form-label text-secondary small fw-bold"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              id="log-email"
+              name="email"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label
+              for="log-password"
+              class="form-label text-secondary small fw-bold"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="log-password"
+              name="password"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary px-4 btn-custom-blue">
+              Login
+            </button>
+            <a href="#/home" class="btn btn-outline-secondary px-4"> Cancel </a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section id="profile" class="page px-3 mt-5">
+      <div class="row">
+        <div class="col-md-8 col-lg-6">
+          <h2 class="fw-bold mb-4">My Profile</h2>
+
+          <div class="card shadow-sm border" style="border-radius: 8px">
+            <div class="card-body p-4">
+              <h4 id="profile-name" class="fw-bold mb-3"></h4>
+
+              <div class="mb-2">
+                <span class="text-secondary fw-bold small text-uppercase"
+                  >Email:</span
+                >
+                <span id="profile-email" class="ms-1"></span>
+              </div>
+
+              <div class="mb-4">
+                <span class="text-secondary fw-bold small text-uppercase"
+                  >Role:</span
+                >
+                <span id="profile-role" class="ms-1"></span>
+              </div>
+
+              <button
+                class="btn btn-outline-primary px-4 py-2"
+                style="border-radius: 6px"
+              >
+                Edit Profile
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="employees" class="page px-3 mt-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold m-0">Employees</h2>
+        <button
+          id="add-employee-btn"
+          class="btn btn-success fw-semibold"
+          style="background-color: #2d7a4d"
+        >
+          + Add Employee
+        </button>
+      </div>
+
+      <div class="table-responsive mb-5">
+        <table class="table border">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Position</th>
+              <th>Dept</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="employee-list-body"></tbody>
+        </table>
+      </div>
+
+      <div id="employee-form-container" class="card shadow-sm d-none">
+        <div class="card-header bg-white fw-bold small text-secondary py-2">
+          Add/Edit Employee
+        </div>
+        <div class="card-body">
+          <form id="employee-form">
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-secondary"
+                >Employee ID</label
+              >
+              <input type="text" id="emp-id" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-secondary"
+                >User Email</label
+              >
+              <input
+                type="email"
+                id="emp-email"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-secondary"
+                >Position</label
+              >
+              <input
+                type="text"
+                id="emp-position"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-secondary"
+                >Department</label
+              >
+              <select id="emp-dept" class="form-select"></select>
+            </div>
+            <div class="mb-4">
+              <label class="form-label small fw-bold text-secondary"
+                >Hire Date</label
+              >
+              <input
+                type="date"
+                id="emp-hire-date"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="d-flex gap-2">
+              <button
+                type="submit"
+                class="btn btn-primary px-4"
+                style="background-color: #515dfa"
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                id="cancel-employee-btn"
+                class="btn btn-secondary px-4"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="departments" class="page px-3 mt-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold m-0">Departments</h2>
+        <button
+          id="add-dept-btn"
+          class="btn btn-success fw-semibold"
+          style="background-color: #2d7a4d"
+        >
+          + Add Department
+        </button>
+      </div>
+
+      <div class="table-responsive mb-5">
+        <table class="table border">
+          <thead class="table-light">
+            <tr>
+              <th class="fw-bold">Name</th>
+              <th class="fw-bold">Description</th>
+              <th class="fw-bold">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="dept-list-body"></tbody>
+        </table>
+      </div>
+
+      <div id="dept-form-container" class="card shadow-sm d-none">
+        <div class="card-header bg-white fw-bold small text-secondary py-2">
+          Add/Edit Department
+        </div>
+        <div class="card-body">
+          <form id="department-form">
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-secondary"
+                >Department Name</label
+              >
+              <input
+                type="text"
+                id="dept-name"
+                class="form-control"
+                placeholder="e.g., Engineering"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label class="form-label small fw-bold text-secondary"
+                >Description</label
+              >
+              <textarea
+                id="dept-desc"
+                class="form-control"
+                rows="2"
+                placeholder="Briefly describe the team..."
+              ></textarea>
+            </div>
+            <div class="d-flex gap-2">
+              <button
+                type="submit"
+                class="btn btn-primary px-4"
+                style="background-color: #515dfa"
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                id="cancel-dept-btn"
+                class="btn btn-secondary px-4"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="accounts" class="page px-3 mt-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold m-0">Accounts</h2>
+        <button
+          id="add-account-btn"
+          class="btn btn-success fw-semibold"
+          style="background-color: #2d7a4d"
+        >
+          + Add Account
+        </button>
+      </div>
+
+      <div class="table-responsive mb-5">
+        <table class="table border align-middle">
+          <thead class="table-light">
+            <tr>
+              <th class="fw-bold">Name</th>
+              <th class="fw-bold">Email</th>
+              <th class="fw-bold">Role</th>
+              <th class="fw-bold">Verified</th>
+              <th class="fw-bold">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="account-list-body"></tbody>
+        </table>
+      </div>
+
+      <div id="account-form-container" class="card shadow-sm d-none">
+        <div class="card-header bg-white fw-bold small text-secondary py-2">
+          Add/Edit Account
+        </div>
+        <div class="card-body">
+          <form id="account-form">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label small fw-bold text-secondary"
+                  >First Name</label
+                >
+                <input
+                  type="text"
+                  id="acc-first-name"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label small fw-bold text-secondary"
+                  >Last Name</label
+                >
+                <input
+                  type="text"
+                  id="acc-last-name"
+                  class="form-control"
+                  required
+                />
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-secondary"
+                >Email</label
+              >
+              <input
+                type="email"
+                id="acc-email"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-secondary"
+                >Password</label
+              >
+              <input
+                type="password"
+                id="acc-password"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-secondary"
+                >Role</label
+              >
+              <select id="acc-role" class="form-select">
+                <option value="User">User</option>
+                <option value="Admin">Admin</option>
+              </select>
+            </div>
+            <div class="mb-4 form-check">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="acc-verified"
+              />
+              <label
+                class="form-check-label small fw-bold text-secondary"
+                for="acc-verified"
+                >Verified</label
+              >
+            </div>
+            <div class="d-flex gap-2">
+              <button
+                type="submit"
+                class="btn btn-primary px-4"
+                style="background-color: #515dfa"
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                id="cancel-account-btn"
+                class="btn btn-secondary px-4"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="requests" class="page px-3 mt-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold m-0">My Requests</h2>
+        <button
+          class="btn btn-success fw-semibold"
+          style="background-color: #2d7a4d"
+          data-bs-toggle="modal"
+          data-bs-target="#requestModal"
+        >
+          + New Request
+        </button>
+      </div>
+
+      <div id="requests-empty" class="text-start">
+        <p class="text-secondary mb-3">You have no requests yet.</p>
+        <button
+          class="btn btn-success px-3 fw-medium"
+          style="background-color: #2d7a4d"
+          data-bs-toggle="modal"
+          data-bs-target="#requestModal"
+        >
+          Create One
+        </button>
+      </div>
+
+      <div id="requests-table-container" class="table-responsive mb-5 d-none">
+        <table class="table border align-middle">
+          <thead class="table-light">
+            <tr>
+              <th class="fw-bold">Req ID</th>
+              <th class="fw-bold">Date</th>
+              <th class="fw-bold">Requester</th>
+              <th class="fw-bold">Items</th>
+              <th class="fw-bold">Status</th>
+              <th class="fw-bold">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="request-list-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div
+      class="modal fade"
+      id="requestModal"
+      tabindex="-1"
+      aria-labelledby="requestModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg" style="border-radius: 12px">
+          <div class="modal-header border-0 pb-0">
+            <h5 class="modal-title fw-bold" id="requestModalLabel">
+              New Request
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="newRequestForm">
+              <div class="mb-3">
+                <label class="form-label small fw-bold text-secondary"
+                  >Type</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  value="Equipment"
+                  readonly
+                />
+              </div>
+
+              <label class="form-label small fw-bold text-secondary mb-2"
+                >Items</label
+              >
+              <div id="modal-item-list">
+                <div class="d-flex gap-2 mb-2 align-items-center">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Item name"
+                  />
+                  <input type="number" class="form-control w-25" value="1" />
+                  <button
+                    type="button"
+                    id="initial-add-row-btn"
+                    class="btn btn-outline-secondary px-2"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div class="mt-4">
+                <button
+                  type="button"
+                  id="submit-request-btn"
+                  class="btn btn-primary px-4 py-2 fw-bold"
+                  style="
+                    background-color: #515dfa;
+                    border: none;
+                    border-radius: 8px;
+                  "
+                >
+                  Submit Request
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="deleteConfirmModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirm Delete</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to delete this item? This action cannot be
+            undone.
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              id="execute-delete-btn"
+              class="btn btn-danger"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="toast-container position-fixed bottom-0 end-0 p-3"
+      style="z-index: 1055"
+    >
+      <div
+        id="appToast"
+        class="toast align-items-center border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="d-flex">
+          <div class="toast-body text-white fw-medium" id="toastMessage"></div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+          ></button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
